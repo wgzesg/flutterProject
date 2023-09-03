@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:masterBet/views/entry_page.dart';
 import 'package:masterBet/views/game_view.dart';
 import 'package:window_size/window_size.dart';
 
@@ -34,12 +35,14 @@ class MyApp extends StatelessWidget {
     WidgetsFlutterBinding.ensureInitialized();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Jardinains Flutter!',
+      title: 'Master Better',
       theme: ThemeData(
         textTheme: GoogleFonts.grandstanderTextTheme(),
         primarySwatch: Colors.blue,
       ),
-      home: GameController(),
+      // home: GameController(),
+      home: EntryPage(),
+      routes: {'/game': (context) => GameController()},
     );
   }
 }

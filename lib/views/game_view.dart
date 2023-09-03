@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:masterBet/elements/line_chart_ui.dart';
 import 'package:masterBet/controller/config.dart';
 import 'package:csv/csv.dart';
-import 'package:file_picker/file_picker.dart';
 
 class GameView extends StatefulWidget {
   const GameView({Key? key}) : super(key: key);
@@ -29,7 +28,7 @@ class _GameViewState extends State<GameView>
   Queue<int> buys = Queue();
   Queue<int> sells = Queue();
   Queue<double> pricesOfInterest = Queue();
-  static const int GAME_LENGTH = 900;
+  static const int GAME_LENGTH = 300;
   int currentGameLength = 0;
   double price = 10;
   double cash = 10000;
@@ -56,7 +55,6 @@ class _GameViewState extends State<GameView>
         const CsvToListConverter(eol: '\n').convert(rawData);
     rnd = new Random();
     int randomIndex = rnd.nextInt(listData.length - GAME_LENGTH - 1);
-    print("total length: ${listData.length}, randomIndex: $randomIndex");
     listData = listData.sublist(randomIndex + 1, randomIndex + GAME_LENGTH + 2);
 
     setState(() {
@@ -166,28 +164,28 @@ class _GameViewState extends State<GameView>
                           padding: const EdgeInsets.all(8),
                           child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  height: 20,
+                                  height: isMobile ? 20 : 35,
                                   child: Text(
                                     "Your Stats",
                                     style: TextStyle(
-                                        fontSize: isMobile ? 20 : 40,
+                                        fontSize: isMobile ? 20 : 35,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black),
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 10,
                                 ),
                                 SizedBox(
-                                    height: 20,
+                                    height: isMobile ? 15 : 20,
                                     child: RichText(
                                       text: TextSpan(
                                         style: TextStyle(
-                                            fontSize: isMobile ? 15 : 30,
+                                            fontSize: isMobile ? 15 : 20,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.deepOrange),
                                         children: <TextSpan>[
@@ -201,11 +199,11 @@ class _GameViewState extends State<GameView>
                                       ),
                                     )),
                                 SizedBox(
-                                    height: 20,
+                                    height: isMobile ? 15 : 20,
                                     child: RichText(
                                       text: TextSpan(
                                         style: TextStyle(
-                                            fontSize: isMobile ? 15 : 30,
+                                            fontSize: isMobile ? 15 : 20,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.deepOrange),
                                         children: <TextSpan>[
@@ -218,10 +216,15 @@ class _GameViewState extends State<GameView>
                                         ],
                                       ),
                                     )),
+                                SizedBox(
+                                  height: 20,
+                                ),
                                 MaterialButton(
+                                  padding: EdgeInsets.all(10),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: borderRadius),
                                   color: Colors.orange,
+                                  minWidth: 250,
                                   onPressed: () {
                                     reset();
                                     Navigator.of(context).pop();
@@ -233,7 +236,32 @@ class _GameViewState extends State<GameView>
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: isMobile ? 20 : 25),
+                                          fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                MaterialButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: borderRadius),
+                                  color: Colors.orange,
+                                  minWidth: 250,
+                                  onPressed: () {
+                                    reset();
+                                    while (Navigator.of(context).canPop()) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text(
+                                      "Back to Menu",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
                                     ),
                                   ),
                                 ),
@@ -261,7 +289,6 @@ class _GameViewState extends State<GameView>
             timer = Timer.periodic(
                 Duration(milliseconds: (fps * 1000).floor()), frameBuilder);
           }
-          print("The key is pressed.");
         },
         onTapDown: (details) {
           if (!launched) {
